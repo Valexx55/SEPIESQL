@@ -93,3 +93,42 @@ SELECT
     ROUND(AVG(pacientes.altura),2) AS altura_media
 FROM
     pacientes;
+
+
+-- PACIENTES QUE TENGAN MÁS DE UNA ALERGIA
+
+SELECT paciente_id, COUNT(*) AS num_alergias
+FROM paciente_alergia
+GROUP BY paciente_id
+HAVING num_alergias > 1; -- "WHERE" FILTRO DE FILAS PERO DE GROUP BY
+
+-- LIMIT 
+
+-- ALERGÍA MÁS CÓMUN
+
+SELECT a.nombre, COUNT(*) AS num_pacientes
+FROM paciente_alergia pa 
+JOIN alergias a ON pa.alergia_id = a.alergia_id
+GROUP BY a.nombre
+ORDER BY num_pacientes DESC
+LIMIT 1;
+
+-- PACIENTES CON UN PESO SUPERRIOR A LA MEDIA
+
+-- 1 SACO LA MEDIA
+-- 2 SACO LOS PACIENTES, QUE TENGA PESO SUPERIOR A ESA MEDIA
+
+
+SELECT AVG(peso) FROM pacientes;
+
+-- EJEMPLO DE SUBOCNULSTA CON AGREGACIÓN
+
+SELECT 
+    nombre, apellido, peso
+FROM
+    pacientes
+WHERE
+    peso > (SELECT 
+            AVG(peso)
+        FROM
+            pacientes);
